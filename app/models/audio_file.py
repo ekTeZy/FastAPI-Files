@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from app.models import Base
+from app.database import Base
 
 
 class AudioFile(Base):
