@@ -38,6 +38,6 @@ class UserRepository:
         if user is None:
             return False
 
-        db.delete(user)
-        db.commit()
+        await db.delete(user)
+        await db.commit()
         return True
