@@ -1,6 +1,8 @@
+.env
 __pycache__/
 *.pyc
-.venv
-.env
-.alembic
-alembic.ini
+.venv/
+alembic/versions/*.pyc
+*.db
+*.sqlite3
+/static/audio/*
