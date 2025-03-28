@@ -9,6 +9,7 @@ from app.auth.token import create_access_token
 from app.core.config import settings
 from app.database import get_db
 from app.models.user import User
+from app.auth.dependencies import get_current_user
 
 router = APIRouter(
     prefix="/auth",
@@ -74,3 +75,13 @@ async def refresh_token(authorization: str = Header(...)) -> JSONResponse:
 
     new_token: str = create_access_token({"sub": user_id})
     return JSONResponse(content={"access_token": new_token})
+
+
+@router.get("/me")
+async def get_me(current_user: User = Depends(get_current_user)) -> dict:
+    return {
+        "id": current_user.id,
+        "username": current_user.username,
+        "email": current_user.email,
+        "yandex_id": current_user.yandex_id,
+    }
