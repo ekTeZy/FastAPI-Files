@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 from app.database import Base
+
 
 class User(Base):
     __tablename__ = "users"
@@ -10,3 +11,4 @@ class User(Base):
     email = Column(String, nullable=True)
     access_token = Column(String, nullable=True)
     refresh_token = Column(String, nullable=True)
+    is_superuser = Column(Boolean, default=False, nullable=False)
