@@ -15,14 +15,17 @@ class UserRepository:
     ) -> User:
         result = await db.execute(select(User).where(User.id == user_id))
         user = result.scalar_one_or_none()
+
         if user is None:
             return None
 
         if username is not None:
             user.username = username
+
         if email is not None:
             user.email = email
 
         await db.commit()
         await db.refresh(user)
+
         return user
