@@ -114,3 +114,18 @@ async def update_me(
         "email": updated_user.email,
         "yandex_id": updated_user.yandex_id
     }
+
+
+@router.delete("/users/{user_id}")
+async def delete_user(
+    user_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+) -> dict:
+
+    if not current_user.is_superuser:
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+    await UserService.delete_user(user_id, db)
+
+    return {"detail": f"User {user_id} deleted successfully"}
