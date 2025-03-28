@@ -29,3 +29,15 @@ class UserRepository:
         await db.refresh(user)
 
         return user
+
+    @staticmethod
+    async def delete_by_id(id: int, db: AsyncSession) -> bool:
+        result = await db.execute(select(User).where(User.id == id))
+        user = result.scalar_one_or_none()
+        
+        if user is None:
+            return False
+
+        db.delete(user)
+        db.commit()
+        return True
