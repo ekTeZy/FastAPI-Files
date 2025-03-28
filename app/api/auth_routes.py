@@ -1,4 +1,11 @@
-from fastapi import APIRouter, Depends, Request, HTTPException, Header
+from fastapi import (
+    APIRouter,
+    Depends,
+    Request,
+    HTTPException,
+    Header,
+    Body
+)
 from fastapi.responses import RedirectResponse, JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -10,6 +17,7 @@ from app.core.config import settings
 from app.database import get_db
 from app.models.user import User
 from app.auth.dependencies import get_current_user
+from app.services.user_service import UserService
 
 router = APIRouter(
     prefix="/auth",
@@ -84,4 +92,25 @@ async def get_me(current_user: User = Depends(get_current_user)) -> dict:
         "username": current_user.username,
         "email": current_user.email,
         "yandex_id": current_user.yandex_id,
+    }
+
+
+@router.patch("/me/update")
+async def update_me(
+    username: str | None = Body(default=None),
+    email: str | None = Body(default=None),
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    updated_user = await UserService.update_user(
+        user_id=current_user.id,
+        db=db,
+        username=username,
+        email=email
+    )
+    return {
+        "id": updated_user.id,
+        "username": updated_user.username,
+        "email": updated_user.email,
+        "yandex_id": updated_user.yandex_id
     }
