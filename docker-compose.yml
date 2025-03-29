@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: audio_db
+    environment:
+      POSTGRES_USER: egor
+      POSTGRES_PASSWORD: PerfWrld34
+      POSTGRES_DB: audio_service
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  app:
+    build: .
+    container_name: audio_api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    volumes:
+      - ./static/audio:/app/static/audio
+    restart: always
+
+volumes:
+  postgres_data:

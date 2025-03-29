@@ -6,3 +6,4 @@ alembic/versions/*.pyc
 *.db
 *.sqlite3
 /static/audio/*
+alembic.ini
